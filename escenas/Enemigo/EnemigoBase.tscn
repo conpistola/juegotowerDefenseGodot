@@ -1,0 +1,42 @@
+[gd_scene load_steps=5 format=3 uid="uid://dof5mcnyewl4l"]
+
+[ext_resource type="Script" uid="uid://b5huj8ncmpeg6" path="res://Scripts/Enemigos/enemigo.gd" id="1_d1gp7"]
+[ext_resource type="Texture2D" uid="uid://odiflead48ji" path="res://assets/zombie/vida/background-bar.png" id="2_xhkgc"]
+[ext_resource type="Texture2D" uid="uid://cqx6xxtfb0duc" path="res://assets/zombie/vida/foreground-bar.png" id="3_8rvv4"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_nr64b"]
+radius = 37.85499
+
+[node name="PathFollow2D" type="PathFollow2D"]
+rotates = false
+script = ExtResource("1_d1gp7")
+
+[node name="BarraVida" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -31.5
+offset_top = -55.21
+offset_right = 28.5
+offset_bottom = -45.20999
+localize_numeral_system = false
+
+[node name="Fondo" type="TextureRect" parent="BarraVida"]
+layout_mode = 0
+offset_right = 56.115
+offset_bottom = 22.0
+texture = ExtResource("2_xhkgc")
+
+[node name="Relleno" type="TextureRect" parent="BarraVida"]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 2.0
+offset_right = 55.0
+offset_bottom = 16.0
+texture = ExtResource("3_8rvv4")
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_nr64b")
