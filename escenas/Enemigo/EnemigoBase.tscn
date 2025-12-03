@@ -40,3 +40,5 @@ collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("CircleShape2D_nr64b")
+
+[node name="timer_idle" type="Timer" parent="."]

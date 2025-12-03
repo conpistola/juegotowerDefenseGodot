@@ -11,12 +11,15 @@ config_version=5
 [application]
 
 config/name="tower_defense"
+run/main_scene="uid://bajriafsvv08s"
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
 GestorJuego="*res://Scripts/gestor/gestor_juego.gd"
+GestorMusica="*res://Scripts/gestor/gestor_musica.gd"
+GestorSonidos="*res://Scripts/gestor/gestor_sonidos.gd"
 
 [display]
 

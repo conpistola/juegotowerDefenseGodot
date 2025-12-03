@@ -1,108 +1,159 @@
 extends Node
 
-# Este script es un singleton (autoload) que gestiona el estado global del juego
-# Controla: dinero, vidas, oleada actual, y comunicación entre escenas
-
-# Señales para notificar cambios a la interfaz
+# Señales del juego
 signal dinero_cambiado(nuevo_dinero)
 signal vidas_cambiadas(nuevas_vidas)
-signal oleada_cambiada(numero_oleada)
-signal enemigo_muerto(dinero_ganado)
+signal oleada_cambiada(nueva_oleada)
+signal victoria
+signal derrota
 
-# Variables de estado del juego
-var dinero: int = 200
+# Variables del estado del juego
+var dinero: int = 1000
 var vidas: int = 5
 var oleada_actual: int = 1
-var total_oleadas: int = 10
+var oleadas_totales: int = 10
 
-# Variables de control
-var enemigos_vivos: int = 0
-var juego_iniciado: bool = false
+# Variables de mapas
+var mapas_disponibles: Array = []
+var mapa_actual_index: int = 0
+var ruta_mapas: String = "res://escenas/Mapas/"
 
-# Inicialización
+# Variables de estadísticas
+var enemigos_spawneados: int = 0
+var enemigos_muertos: int = 0
+var oro_ganado_total: int = 0
+
 func _ready():
-	print("GestorJuego inicializado")
-	reset_juego()
+	# Detectar automáticamente todos los mapas disponibles
+	detectar_mapas()
+	print("Mapas detectados: ", mapas_disponibles)
 
-# Resetear el juego a valores iniciales
-func reset_juego():
-	dinero = 200
+# Detecta automáticamente todos los archivos mapa_XX.tscn en la carpeta
+func detectar_mapas():
+	mapas_disponibles.clear()
+	var dir = DirAccess.open(ruta_mapas)
+	
+	if dir:
+		dir.list_dir_begin()
+		var file_name = dir.get_next()
+		
+		while file_name != "":
+			# Buscar archivos que empiecen con "mapa_" y terminen con ".tscn"
+			if file_name.begins_with("mapa_") and file_name.ends_with(".tscn"):
+				# Extraer el número del mapa (ej: "mapa_01.tscn" -> 1)
+				var numero_str = file_name.replace("mapa_", "").replace(".tscn", "")
+				mapas_disponibles.append({
+					"numero": int(numero_str),
+					"ruta": ruta_mapas + file_name,
+					"nombre": file_name
+				})
+			file_name = dir.get_next()
+		
+		dir.list_dir_end()
+		
+		# Ordenar mapas por número
+		mapas_disponibles.sort_custom(func(a, b): return a.numero < b.numero)
+	else:
+		push_error("No se pudo abrir la carpeta de mapas: " + ruta_mapas)
+
+# Obtener el mapa actual
+func obtener_mapa_actual() -> Dictionary:
+	if mapa_actual_index < mapas_disponibles.size():
+		return mapas_disponibles[mapa_actual_index]
+	return {}
+
+# Verificar si hay más mapas disponibles
+func hay_siguiente_mapa() -> bool:
+	return mapa_actual_index + 1 < mapas_disponibles.size()
+
+# Cargar el siguiente mapa
+func cargar_siguiente_mapa():
+	if hay_siguiente_mapa():
+		mapa_actual_index += 1
+		var siguiente_mapa = obtener_mapa_actual()
+		print("Cargando siguiente mapa: ", siguiente_mapa.nombre)
+		
+		# Resetear oleada pero mantener dinero
+		oleada_actual = 1
+		oleada_cambiada.emit(oleada_actual)
+		
+		# Cargar la escena del siguiente mapa
+		get_tree().change_scene_to_file(siguiente_mapa.ruta)
+	else:
+		# No hay más mapas, VICTORIA
+		print("¡VICTORIA! No hay más mapas disponibles")
+		victoria.emit()
+
+# Reiniciar variables del juego (sin cambiar escena)
+func reiniciar_juego():
+	mapa_actual_index = 0
+	dinero = 1000
 	vidas = 5
 	oleada_actual = 1
-	enemigos_vivos = 0
-	juego_iniciado = false
-	emit_signal("dinero_cambiado", dinero)
-	emit_signal("vidas_cambiadas", vidas)
-	emit_signal("oleada_cambiada", oleada_actual)
+	enemigos_spawneados = 0
+	enemigos_muertos = 0
+	oro_ganado_total = 0
+	
+	dinero_cambiado.emit(dinero)
+	vidas_cambiadas.emit(vidas)
+	oleada_cambiada.emit(oleada_actual)
+	
+	print("Variables del juego reseteadas")
 
-# Añadir dinero al jugador
+# Nueva función: Reiniciar y volver al primer mapa
+func reiniciar_y_jugar():
+	reiniciar_juego()
+	
+	# Cargar el primer mapa
+	if mapas_disponibles.size() > 0:
+		get_tree().change_scene_to_file(mapas_disponibles[0].ruta)
+		
+# Registrar cuando se spawnea un enemigo
+func registrar_enemigo_spawneado():
+	enemigos_spawneados += 1
+
+# Registrar cuando muere un enemigo Y agregar el oro
+func registrar_enemigo_muerto(oro_obtenido: int):
+	enemigos_muertos += 1
+	oro_ganado_total += oro_obtenido
+	agregar_dinero(oro_obtenido)  # AGREGADO: Sumar el oro al dinero
+
+# Agregar dinero
 func agregar_dinero(cantidad: int):
 	dinero += cantidad
-	emit_signal("dinero_cambiado", dinero)
-	print("Dinero agregado: +", cantidad, " | Total: ", dinero)
+	dinero_cambiado.emit(dinero)
 
-# Gastar dinero (retorna true si había suficiente dinero)
+# Gastar dinero
 func gastar_dinero(cantidad: int) -> bool:
 	if dinero >= cantidad:
 		dinero -= cantidad
-		emit_signal("dinero_cambiado", dinero)
-		print("Dinero gastado: -", cantidad, " | Restante: ", dinero)
+		dinero_cambiado.emit(dinero)
 		return true
-	else:
-		print("Dinero insuficiente. Necesitas: ", cantidad, " | Tienes: ", dinero)
-		return false
+	return false
 
-# Verificar si hay suficiente dinero
-func tiene_dinero(cantidad: int) -> bool:
-	return dinero >= cantidad
-
-# Perder una vida
-func perder_vida():
+# Restar vida
+func restar_vida():
 	vidas -= 1
-	emit_signal("vidas_cambiadas", vidas)
-	print("Vida perdida | Vidas restantes: ", vidas)
+	vidas_cambiadas.emit(vidas)
+	print("Vida perdida. Vidas restantes: ", vidas)
 	
 	# Verificar derrota
 	if vidas <= 0:
-		game_over()
+		print("¡DERROTA! Vidas agotadas")
+		derrota.emit()
 
-# Avanzar a la siguiente oleada
-func siguiente_oleada():
-	if oleada_actual < total_oleadas:
-		oleada_actual += 1
-		emit_signal("oleada_cambiada", oleada_actual)
-		print("Oleada ", oleada_actual, "/", total_oleadas)
-	else:
-		victoria()
+# Cambiar oleada
+func cambiar_oleada(nueva_oleada: int):
+	oleada_actual = nueva_oleada
+	oleada_cambiada.emit(oleada_actual)
 
-# Registrar cuando un enemigo es generado
-func registrar_enemigo_spawneado():
-	enemigos_vivos += 1
-	print("Enemigo spawneado | Enemigos vivos: ", enemigos_vivos)
-
-# Registrar cuando un enemigo muere
-func registrar_enemigo_muerto(dinero_drop: int):
-	enemigos_vivos -= 1
-	agregar_dinero(dinero_drop)
-	emit_signal("enemigo_muerto", dinero_drop)
-	print("Enemigo eliminado | Enemigos vivos: ", enemigos_vivos)
-
-# Obtener cantidad de enemigos vivos
-func obtener_enemigos_vivos() -> int:
-	return enemigos_vivos
-
-# Victoria - completar todas las oleadas
-func victoria():
-	print("VICTORIA - Todas las oleadas completadas")
-	juego_iniciado = false
-	# Aquí se mostraría panel de victoria
-	# Por ahora solo imprimimos mensaje
-	await get_tree().create_timer(2.0).timeout
-	get_tree().change_scene_to_file("res://menu.tscn")
-
-# Derrota - se acabaron las vidas
-func game_over():
-	print("GAME OVER - Sin vidas")
-	juego_iniciado = false
-	await get_tree().create_timer(1.0).timeout
-	get_tree().change_scene_to_file("res://menu.tscn")
+# Verificar si se completó la última oleada del último mapa
+func verificar_victoria_oleada():
+	# Si estamos en la oleada 10 Y es el último mapa disponible
+	if oleada_actual >= oleadas_totales and not hay_siguiente_mapa():
+		print("¡VICTORIA! Oleada final del último mapa completada")
+		victoria.emit()
+	elif oleada_actual >= oleadas_totales and hay_siguiente_mapa():
+		# Hay más mapas, cargar el siguiente
+		print("Oleada 10 completada. Cargando siguiente mapa...")
+		cargar_siguiente_mapa()

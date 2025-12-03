@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://baeprrn41qurs"]
+
+[ext_resource type="Script" uid="uid://dib8ou7372kun" path="res://Scripts/Torres/proyectil.gd" id="1_nk3xp"]
+[ext_resource type="Texture2D" uid="uid://ntru2cr5p6ot" path="res://assets/torre/Tower Archer/Arrow.png" id="2_4ocmm"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nk3xp"]
+size = Vector2(20, 48)
+
+[node name="Proyectil" type="Area2D"]
+script = ExtResource("1_nk3xp")
+
+[node name="SpriteFlecha" type="Sprite2D" parent="."]
+rotation = 1.5707964
+texture = ExtResource("2_4ocmm")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+rotation = 1.5707964
+shape = SubResource("RectangleShape2D_nk3xp")

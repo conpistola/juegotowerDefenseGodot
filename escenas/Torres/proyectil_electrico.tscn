@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://dwnj4ykifqv2m"]
+
+[ext_resource type="Script" uid="uid://csf3e5oihwu46" path="res://Scripts/Torres/proyectil_electrico.gd" id="1_rw6qt"]
+[ext_resource type="Texture2D" uid="uid://b8vp420154sba" path="res://assets/torre/Tower Electric/Lighter.png" id="2_rw6qt"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nk3xp"]
+size = Vector2(40, 40)
+
+[node name="Proyectil" type="Area2D"]
+script = ExtResource("1_rw6qt")
+
+[node name="SpriteElectrico" type="Sprite2D" parent="."]
+rotation = 1.5707964
+texture = ExtResource("2_rw6qt")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+rotation = 1.5707964
+shape = SubResource("RectangleShape2D_nk3xp")
