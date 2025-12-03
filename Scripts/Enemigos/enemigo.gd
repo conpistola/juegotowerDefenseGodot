@@ -22,8 +22,21 @@ var barra_vida_relleno: TextureRect
 
 # Inicialización del enemigo
 func _ready():
+	# Configurar para que se pause cuando el juego esté pausado
+	process_mode = Node.PROCESS_MODE_PAUSABLE
+	
+	var timer_idle = Timer.new()
+	timer_idle.wait_time = randf_range(3.0, 8.0)  
+	timer_idle.one_shot = false
+	timer_idle.timeout.connect(_on_timer_idle_sonido)
+	add_child(timer_idle)
+	timer_idle.start()
+	
 	# Desactivar rotación automática
 	rotates = false
+	
+	# NUEVO: Desactivar loop para que no vuelva al inicio
+	loop = false
 	
 	# Inicializar vida al máximo
 	vida_actual = vida_maxima
@@ -47,29 +60,26 @@ func _ready():
 		sprite_animado.play("derecha")
 	
 	print("Enemigo spawneado con vida: ", vida_maxima)
-
+	
+# Proceso en cada frame
 # Proceso en cada frame
 func _process(delta):
 	if not esta_vivo:
 		return
 	
-	# En el primer frame, solo guardar posición
 	if primer_frame:
 		posicion_anterior = global_position
 		primer_frame = false
 		return
 	
-	# Mover al enemigo a lo largo del camino
 	progress += velocidad * delta
 	
-	# Actualizar animación según dirección de movimiento
 	actualizar_animacion()
-	
-	# Verificar si llegó al final del camino
 	if progress_ratio >= 1.0:
+		print("PROGRESO >= 1.0 DETECTADO - Llamando llegar_al_final()")
 		llegar_al_final()
+		return  
 
-# Actualizar la animación según la dirección de movimiento
 # Actualizar la animación según la dirección de movimiento
 func actualizar_animacion():
 	if not sprite_animado:
@@ -125,6 +135,7 @@ func recibir_danio(cantidad: float):
 	# Reducir vida
 	vida_actual -= cantidad
 	vida_actual = max(0, vida_actual)  # No permitir vida negativa
+	GestorSonidos.reproducir_zombie_hurt()
 	
 	# Actualizar barra de vida
 	actualizar_barra_vida()
@@ -143,11 +154,13 @@ func actualizar_barra_vida():
 	# Calcular porcentaje de vida
 	var porcentaje_vida = vida_actual / vida_maxima
 	
-	# Ajustar el tamaño de la barra roja según la vida actual
-	# Mantener la altura original pero reducir el ancho
-	var ancho_original = barra_vida_fondo.size.x
-	barra_vida_relleno.size.x = ancho_original * porcentaje_vida
-
+	# Ajustar usando scale (método más efectivo para TextureRect)
+	barra_vida_relleno.scale.x = porcentaje_vida
+	
+	# Ajustar posición para que se reduzca desde la derecha hacia la izquierda
+	# El pivot debe estar en la izquierda (0, 0.5)
+	barra_vida_relleno.pivot_offset = Vector2(0, barra_vida_relleno.size.y / 2.0)
+	
 # Enemigo muere
 func morir():
 	if not esta_vivo:
@@ -156,6 +169,7 @@ func morir():
 	esta_vivo = false
 	
 	# Dar dinero al jugador
+	GestorSonidos.reproducir_zombie_death()
 	GestorJuego.registrar_enemigo_muerto(dinero_al_morir)
 	
 	print("Enemigo eliminado. Dinero otorgado: ", dinero_al_morir)
@@ -169,6 +183,7 @@ func morir():
 	tween.tween_property(self, "modulate:a", 0.0, 0.3)
 	tween.tween_callback(queue_free)
 
+
 # Enemigo llega al final del camino
 func llegar_al_final():
 	if not esta_vivo:
@@ -176,13 +191,13 @@ func llegar_al_final():
 	
 	esta_vivo = false
 	
+	print("Enemigo llegó al final. RESTANDO VIDA")
+	
 	# El jugador pierde una vida
-	GestorJuego.perder_vida()
+	GestorJuego.restar_vida()
 	
-	print("Enemigo llegó al final. Vida perdida.")
-	
-	# Eliminar el enemigo
-	queue_free()
+	# Eliminar el enemigo (diferir para asegurar que la señal se procesa)
+	call_deferred("queue_free")
 
 # Función para obtener la posición global del enemigo
 func obtener_posicion() -> Vector2:
@@ -191,3 +206,12 @@ func obtener_posicion() -> Vector2:
 # Verificar si el enemigo es volador
 func es_enemigo_volador() -> bool:
 	return es_volador
+	
+func _on_timer_idle_sonido():
+	# Reproducir sonido idle solo si el zombie está vivo
+	if vida_actual > 0:
+		GestorSonidos.reproducir_zombie_idle()
+	
+	# Cambiar el tiempo para el próximo sonido (aleatorio)
+	if has_node("Timer"):
+		get_node("Timer").wait_time = randf_range(3.0, 8.0)

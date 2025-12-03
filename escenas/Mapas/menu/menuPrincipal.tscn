@@ -1,0 +1,88 @@
+[gd_scene load_steps=5 format=3 uid="uid://bajriafsvv08s"]
+
+[ext_resource type="PackedScene" uid="uid://ci662eip1t57q" path="res://escenas/Mapas/menu/MapaInicio.tscn" id="1_pgel2"]
+[ext_resource type="PackedScene" uid="uid://cs8jhxet1461j" path="res://escenas/Mapas/menu/menuFondo.tscn" id="2_xxyor"]
+[ext_resource type="Script" uid="uid://dr0k816nwpl6v" path="res://Scripts/menu/menu_principal.gd" id="3_script"]
+[ext_resource type="Texture2D" uid="uid://cvvpa7muiyjxj" path="res://assets/hub/Title.png" id="4_7kemt"]
+
+[node name="MenuPrincipal" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_script")
+
+[node name="CapaOscura" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 488.0
+offset_top = 272.0
+offset_right = 488.0
+offset_bottom = 208.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.6)
+
+[node name="MapaInicio" parent="CapaOscura" instance=ExtResource("1_pgel2")]
+z_index = -2
+position = Vector2(-208, -656)
+
+[node name="MenuFondo" parent="CapaOscura/MapaInicio" instance=ExtResource("2_xxyor")]
+z_index = 10
+
+[node name="ContenedorUI" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 488.0
+offset_top = 384.0
+offset_right = 488.0
+offset_bottom = 384.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ContenedorUI"]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Titulo" type="Sprite2D" parent="ContenedorUI/VBoxContainer"]
+position = Vector2(150, -263)
+scale = Vector2(0.75906736, 0.687963)
+texture = ExtResource("4_7kemt")
+
+[node name="Espaciador1" type="Control" parent="ContenedorUI/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="BotonJugar" type="Button" parent="ContenedorUI/VBoxContainer"]
+custom_minimum_size = Vector2(300, 80)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "JUGAR"
+
+[node name="Espaciador2" type="Control" parent="ContenedorUI/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="BotonOpciones" type="Button" parent="ContenedorUI/VBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(300, 80)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "OPCIONES"
+
+[node name="Espaciador3" type="Control" parent="ContenedorUI/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="BotonSalir" type="Button" parent="ContenedorUI/VBoxContainer"]
+custom_minimum_size = Vector2(300, 80)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "SALIR"

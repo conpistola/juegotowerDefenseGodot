@@ -1,0 +1,373 @@
+[gd_scene load_steps=18 format=3 uid="uid://ljekbg2b2crl"]
+
+[ext_resource type="Texture2D" uid="uid://blvbkrpjdp2eq" path="res://assets/hub/Wave Bar.png" id="1_bnv4d"]
+[ext_resource type="Script" uid="uid://csjfl66lsfq12" path="res://Scripts/hub/hub.gd" id="1_xpqq0"]
+[ext_resource type="Texture2D" uid="uid://ccrjxejpc2uf7" path="res://assets/hub/MP.png" id="2_qdda4"]
+[ext_resource type="Texture2D" uid="uid://cqmwljx860sdv" path="res://assets/hub/HP.png" id="3_5hwxr"]
+[ext_resource type="Texture2D" uid="uid://c40d2olj705r" path="res://assets/hub/contruccion/cartel_mejora.png" id="4_5hwxr"]
+[ext_resource type="Texture2D" uid="uid://b1nq1eryqfvg8" path="res://assets/hub/contruccion/arquero_off.png" id="5_gkd4b"]
+[ext_resource type="Texture2D" uid="uid://b433jso17vnrk" path="res://assets/hub/contruccion/arquero_on.png" id="6_ccjcb"]
+[ext_resource type="Texture2D" uid="uid://bd2t27kb7s1lm" path="res://assets/hub/contruccion/bomba_off.png" id="7_8xv5d"]
+[ext_resource type="Texture2D" uid="uid://55rdeuvra0um" path="res://assets/hub/contruccion/bomba_on.png" id="8_cuqd6"]
+[ext_resource type="Texture2D" uid="uid://c2xcxgpe1jxit" path="res://assets/hub/contruccion/electrica_off.png" id="9_7ib5a"]
+[ext_resource type="Texture2D" uid="uid://cqjl5as87j14f" path="res://assets/hub/contruccion/electrica_on.png" id="10_sir6q"]
+[ext_resource type="Texture2D" uid="uid://bftcddm3wk76m" path="res://assets/hub/contruccion/franco_off.png" id="11_i7jts"]
+[ext_resource type="Texture2D" uid="uid://chq2j1j20fao6" path="res://assets/hub/contruccion/franco_on.png" id="12_tbjn2"]
+[ext_resource type="Texture2D" uid="uid://wh0mq7r1m3et" path="res://assets/hub/cerrar.png" id="13_sir6q"]
+[ext_resource type="Texture2D" uid="uid://d01vuocwys3ck" path="res://assets/hub/upgrade_off.png" id="14_tbjn2"]
+[ext_resource type="Texture2D" uid="uid://cwm5o4osvs5uh" path="res://assets/hub/upgrade_on.png" id="15_xpqq0"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_advna"]
+texture = ExtResource("4_5hwxr")
+
+[node name="Hub" type="CanvasLayer"]
+script = ExtResource("1_xpqq0")
+
+[node name="PanelSuperior" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 3.0
+offset_right = 3.0
+offset_bottom = 80.0
+grow_horizontal = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelSuperior"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelSuperior/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="ContenedorOleada" type="HBoxContainer" parent="PanelSuperior/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="IconoOleada" type="TextureRect" parent="PanelSuperior/MarginContainer/HBoxContainer/ContenedorOleada"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("1_bnv4d")
+stretch_mode = 5
+
+[node name="LabelOleada" type="Label" parent="PanelSuperior/MarginContainer/HBoxContainer/ContenedorOleada/IconoOleada"]
+layout_mode = 0
+offset_left = 140.0
+offset_top = 30.0
+offset_right = 334.0
+offset_bottom = 75.0
+theme_override_font_sizes/font_size = 32
+text = "Oleada: 1/10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Separador1" type="Control" parent="PanelSuperior/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+
+[node name="ContenedorDinero" type="HBoxContainer" parent="PanelSuperior/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="iconoDinero" type="TextureRect" parent="PanelSuperior/MarginContainer/HBoxContainer/ContenedorDinero"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("2_qdda4")
+stretch_mode = 5
+
+[node name="LabelDinero" type="Label" parent="PanelSuperior/MarginContainer/HBoxContainer/ContenedorDinero/iconoDinero"]
+layout_mode = 0
+offset_left = 62.0
+offset_top = 30.0
+offset_right = 256.0
+offset_bottom = 123.0
+theme_override_font_sizes/font_size = 32
+text = "200
+"
+horizontal_alignment = 1
+
+[node name="Separador2" type="Control" parent="PanelSuperior/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+
+[node name="ContenedorVidas" type="HBoxContainer" parent="PanelSuperior/MarginContainer/HBoxContainer/Separador2"]
+layout_mode = 0
+offset_left = 69.0
+offset_right = 342.0
+offset_bottom = 114.0
+theme_override_constants/separation = 10
+
+[node name="IconoVidas" type="TextureRect" parent="PanelSuperior/MarginContainer/HBoxContainer/Separador2/ContenedorVidas"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("3_5hwxr")
+stretch_mode = 5
+
+[node name="LabelVidas" type="Label" parent="PanelSuperior/MarginContainer/HBoxContainer/Separador2/ContenedorVidas/IconoVidas"]
+layout_mode = 0
+offset_left = 62.0
+offset_top = 30.0
+offset_right = 256.0
+offset_bottom = 123.0
+theme_override_font_sizes/font_size = 32
+text = "20
+"
+horizontal_alignment = 1
+
+[node name="LabelPrecioVender" type="Label" parent="PanelSuperior"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -643.0
+offset_top = 16.0
+offset_right = -3.0
+offset_bottom = 96.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 30
+text = "Proxima oleada en: 10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PanelConstruccion" type="Panel" parent="."]
+visible = false
+custom_minimum_size = Vector2(600, 150)
+offset_left = 660.0
+offset_top = 500.0
+offset_right = 1260.0
+offset_bottom = 880.0
+theme_override_styles/panel = SubResource("StyleBoxTexture_advna")
+
+[node name="GridContainer" type="GridContainer" parent="PanelConstruccion"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/h_separation = 15
+theme_override_constants/v_separation = 10
+columns = 4
+
+[node name="ContenedorArquero" type="VBoxContainer" parent="PanelConstruccion/GridContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+alignment = 1
+
+[node name="BotonArquero" type="TextureButton" parent="PanelConstruccion/GridContainer/ContenedorArquero"]
+custom_minimum_size = Vector2(110, 90)
+layout_mode = 2
+texture_normal = ExtResource("5_gkd4b")
+texture_pressed = ExtResource("6_ccjcb")
+texture_hover = ExtResource("6_ccjcb")
+texture_disabled = ExtResource("5_gkd4b")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="LabelPrecioArquero" type="Label" parent="PanelConstruccion/GridContainer/ContenedorArquero/BotonArquero"]
+layout_mode = 0
+offset_left = -1.0
+offset_top = 51.0
+offset_right = 109.0
+offset_bottom = 77.0
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 18
+text = "100"
+horizontal_alignment = 1
+
+[node name="ContenedorBomber" type="VBoxContainer" parent="PanelConstruccion/GridContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+alignment = 1
+
+[node name="BotonBomber" type="TextureButton" parent="PanelConstruccion/GridContainer/ContenedorBomber"]
+custom_minimum_size = Vector2(110, 90)
+layout_mode = 2
+texture_normal = ExtResource("7_8xv5d")
+texture_pressed = ExtResource("8_cuqd6")
+texture_hover = ExtResource("8_cuqd6")
+texture_disabled = ExtResource("7_8xv5d")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="LabelPrecioBomber" type="Label" parent="PanelConstruccion/GridContainer/ContenedorBomber/BotonBomber"]
+layout_mode = 0
+offset_left = -1.0
+offset_top = 51.0
+offset_right = 109.0
+offset_bottom = 77.0
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 18
+text = "150"
+horizontal_alignment = 1
+
+[node name="ContenedorElectrica" type="VBoxContainer" parent="PanelConstruccion/GridContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+alignment = 1
+
+[node name="BotonElectrica" type="TextureButton" parent="PanelConstruccion/GridContainer/ContenedorElectrica"]
+custom_minimum_size = Vector2(110, 90)
+layout_mode = 2
+texture_normal = ExtResource("9_7ib5a")
+texture_pressed = ExtResource("10_sir6q")
+texture_hover = ExtResource("10_sir6q")
+texture_disabled = ExtResource("9_7ib5a")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="LabelPrecioElectrica" type="Label" parent="PanelConstruccion/GridContainer/ContenedorElectrica/BotonElectrica"]
+layout_mode = 0
+offset_left = -1.0
+offset_top = 51.0
+offset_right = 109.0
+offset_bottom = 77.0
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 18
+text = "300"
+horizontal_alignment = 1
+
+[node name="ContenedorSniper" type="VBoxContainer" parent="PanelConstruccion/GridContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+alignment = 1
+
+[node name="BotonSniper" type="TextureButton" parent="PanelConstruccion/GridContainer/ContenedorSniper"]
+custom_minimum_size = Vector2(110, 90)
+layout_mode = 2
+texture_normal = ExtResource("11_i7jts")
+texture_pressed = ExtResource("12_tbjn2")
+texture_hover = ExtResource("12_tbjn2")
+texture_disabled = ExtResource("11_i7jts")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="LabelPrecioSniper" type="Label" parent="PanelConstruccion/GridContainer/ContenedorSniper/BotonSniper"]
+layout_mode = 0
+offset_left = -1.0
+offset_top = 51.0
+offset_right = 109.0
+offset_bottom = 77.0
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 18
+text = "500"
+horizontal_alignment = 1
+
+[node name="BotonCerrar" type="TextureButton" parent="PanelConstruccion"]
+custom_minimum_size = Vector2(110, 90)
+layout_mode = 0
+offset_left = 492.0
+offset_top = 12.0
+offset_right = 602.0
+offset_bottom = 102.0
+texture_normal = ExtResource("13_sir6q")
+texture_pressed = ExtResource("13_sir6q")
+texture_hover = ExtResource("13_sir6q")
+texture_disabled = ExtResource("13_sir6q")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="PanelMejora" type="Panel" parent="."]
+visible = false
+custom_minimum_size = Vector2(450, 150)
+offset_left = 660.0
+offset_top = 500.0
+offset_right = 1110.0
+offset_bottom = 880.0
+theme_override_styles/panel = SubResource("StyleBoxTexture_advna")
+
+[node name="ContenedorBotones" type="GridContainer" parent="PanelMejora"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/h_separation = 15
+theme_override_constants/v_separation = 10
+columns = 2
+
+[node name="ContenedorMejorar" type="VBoxContainer" parent="PanelMejora/ContenedorBotones"]
+layout_mode = 2
+theme_override_constants/separation = 5
+alignment = 1
+
+[node name="BotonMejorar" type="TextureButton" parent="PanelMejora/ContenedorBotones/ContenedorMejorar"]
+custom_minimum_size = Vector2(110, 90)
+layout_mode = 2
+texture_normal = ExtResource("14_tbjn2")
+texture_pressed = ExtResource("15_xpqq0")
+texture_hover = ExtResource("15_xpqq0")
+texture_disabled = ExtResource("14_tbjn2")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="LabelPrecioMejorar" type="Label" parent="PanelMejora/ContenedorBotones/ContenedorMejorar/BotonMejorar"]
+layout_mode = 0
+offset_left = -1.0
+offset_top = 51.0
+offset_right = 109.0
+offset_bottom = 77.0
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 18
+text = "100"
+horizontal_alignment = 1
+
+[node name="ContenedorVender" type="VBoxContainer" parent="PanelMejora/ContenedorBotones"]
+layout_mode = 2
+theme_override_constants/separation = 5
+alignment = 1
+
+[node name="BotonVender" type="TextureButton" parent="PanelMejora/ContenedorBotones/ContenedorVender"]
+custom_minimum_size = Vector2(110, 90)
+layout_mode = 2
+texture_normal = ExtResource("7_8xv5d")
+texture_pressed = ExtResource("8_cuqd6")
+texture_hover = ExtResource("8_cuqd6")
+texture_disabled = ExtResource("7_8xv5d")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="LabelPrecioVender" type="Label" parent="PanelMejora/ContenedorBotones/ContenedorVender/BotonVender"]
+layout_mode = 0
+offset_left = -1.0
+offset_top = 51.0
+offset_right = 109.0
+offset_bottom = 77.0
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 18
+text = "+75
+"
+horizontal_alignment = 1
+
+[node name="BotonCerrar" type="TextureButton" parent="PanelMejora"]
+custom_minimum_size = Vector2(110, 90)
+layout_mode = 0
+offset_left = 348.0
+offset_top = 12.0
+offset_right = 458.0
+offset_bottom = 102.0
+texture_normal = ExtResource("13_sir6q")
+texture_pressed = ExtResource("13_sir6q")
+texture_hover = ExtResource("13_sir6q")
+texture_disabled = ExtResource("13_sir6q")
+ignore_texture_size = true
+stretch_mode = 5

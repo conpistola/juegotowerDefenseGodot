@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://c6ibrkw0efirh"]
+
+[ext_resource type="Script" uid="uid://cgtaji1kjbfjh" path="res://Scripts/Torres/proyectil_bomba.gd" id="1_tdu11"]
+[ext_resource type="Texture2D" uid="uid://do1idnwr3ljni" path="res://assets/torre/Tower Bomber/Bomb.png" id="2_tdu11"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nk3xp"]
+size = Vector2(40, 40)
+
+[node name="Proyectil" type="Area2D"]
+script = ExtResource("1_tdu11")
+
+[node name="SpriteBomba" type="Sprite2D" parent="."]
+rotation = 1.5707964
+texture = ExtResource("2_tdu11")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+rotation = 1.5707964
+shape = SubResource("RectangleShape2D_nk3xp")

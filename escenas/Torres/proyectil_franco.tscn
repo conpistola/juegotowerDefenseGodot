@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://dlnyqv2734a7g"]
+
+[ext_resource type="Texture2D" uid="uid://lygbxc07ttpl" path="res://assets/torre/Tower Sniper/Bullet.png" id="1_gv5h3"]
+[ext_resource type="Script" uid="uid://dto0ecx8anxvo" path="res://Scripts/Torres/proyectil_franco.gd" id="1_h3jjy"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nk3xp"]
+size = Vector2(15.999999, 16)
+
+[node name="Proyectil" type="Area2D"]
+script = ExtResource("1_h3jjy")
+
+[node name="SpriteFranco" type="Sprite2D" parent="."]
+rotation = 1.5707964
+texture = ExtResource("1_gv5h3")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 2.3841858e-07)
+rotation = 1.5707964
+shape = SubResource("RectangleShape2D_nk3xp")
